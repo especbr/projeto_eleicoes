@@ -1,0 +1,31 @@
+/*-- scss:defaults --*/
+$theme-blue: #0F4957;
+$theme-yellow: #F4BA02;
+$theme-pink: #Ed3053;
+$link-color: $theme-blue;
+$heading-color: $theme-pink;
+$presentation-heading-color: lighten($theme-pink, 15%);
+
+
+/*-- scss:rules --*/
+
+.reveal .slide-logo {
+  display: block;
+  position: relative;
+  bottom: unset !important;
+  right: unset !important;
+  top: 5px;
+  left: 1600px;
+  height: 60px !important;
+  width: 120px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+.figura {
+  align-self: center;
+  width: 100%;
+  margin: auto;
+  }
+
+

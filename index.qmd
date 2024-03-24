@@ -1,0 +1,204 @@
+---
+title: "Eleições 2024"
+title-slide-attributes:
+  data-background-image: /img/bg-Computador.png
+  data-background-size: contain
+  data-background-opacity: "0.25"
+  data-background-width: "100%"
+author: "AG Consultoria"
+format: 
+  revealjs:
+    width: 1920
+    height: 1080
+    slide-number: true
+    auto-stretch: true
+    logo: "img/agenda-2.png"
+    css: "custom.scss"
+    theme: [simple, custom.scss]
+output: 
+  revealjs::reveal
+editor: visual
+execute: 
+  echo: false
+  warning: false
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+#| error: false
+
+library(tidyverse)
+library(readxl)
+library(janitor)
+library(ggthemes)
+library(ggalt)
+library(RColorBrewer)
+library(echarts4r)
+library(scales)
+library(summarytools)
+library(waffle)
+```
+
+```{r}
+
+dados <- read_excel("data/dados.xlsx")
+```
+
+```{r}
+#| echo: false
+
+dados_clean <- dados |> 
+  clean_names() |> 
+  rename(
+    data_hora = carimbo_de_data_hora,
+    pesquisador = x01_indique_o_pesquisador_de_campo_que_esta_fazendo_este_questionario,
+    bairro = x02_bairro_realizacao_da_pesquisa,
+    eleitor_local = x03_voce_e_eleitor_aqui_em_humaita,
+    sexo = x04_sexo,
+    idade = x05_qual_sua_idade,
+    escolaridade = x06_qual_sua_escolaridade_ate_que_ano_estudou_na_escola,
+    renda = x07_qual_sua_renda,
+    ocupacao = x08_qual_sua_ocupacao,
+    estado_civil = x09_qual_seu_estado_civil,
+    filhos = x10_o_senhor_tem_filhos,
+    prefeito_espontanea = x11_cenario_01_pensando_na_eleicao_para_prefeito_de_humaita_se_a_eleicao_fosse_hoje_em_quem_o_senhor_a_votaria_para_prefeito_espontanea,
+    prefeito_rejeicao_espontanea = x12_cenario_02_pensando_na_eleicao_para_prefeito_de_humaita_se_a_eleicao_fosse_hoje_em_quem_o_senhor_a_nao_votaria_para_prefeito_espontanea,
+    prefeito_estimulada = x13_cenario_03_se_a_eleicao_fosse_hoje_e_os_candidatos_fossem_deste_cartao_em_quem_o_senhor_votaria_para_prefeito_de_humaita_estimulada,
+    prefeito_rejeicao_estimulada = x14_cenario_04_se_a_eleicao_fosse_hoje_e_os_candidatos_fossem_deste_cartao_em_quem_o_senhor_nao_votaria_para_prefeito_de_humaita_estimulada,
+    vereador_espontanea = x15_cenario_05_pensando_na_eleicao_para_vereador_de_humaita_se_a_eleicao_fosse_hoje_em_quem_o_senhor_a_votaria_para_vereador_espontanea
+  ) |> 
+  select(-anexe_a_imagem_do_local_da_pesquisa, -pesquisador) |> 
+  janitor::remove_empty(c("rows", "cols")) |> 
+  janitor::remove_constant() |> 
+  mutate(across
+         (where(is.numeric),
+         ~ .x / sum(.x), .names = "prop_{.col}"))
+
+```
+
+## Apresentação {background-color="transparent" background-image="img/bg-Computador.png" background-opacity="0.5"}
+
+<br> Neste relatório, apresentamos os resultados de uma pesquisa de intenção de votos para prefeito e vereador de Humaitá (AM). A pesquisa foi realizada no dia 10 de outubro de 2024. <br> <br>
+
+## Metodologia
+
+<br> A pesquisa foi realizada por meio de entrevistas presenciais com 500 eleitores de Humaitá (AM). A margem de erro é de 5 pontos percentuais para mais ou para menos, com um nível de confiança de 95%. <br> <br>
+
+## Perfil dos entrevistados
+
+## Escolaridade
+
+```{r}
+#| fig.width: 12
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 0.5
+
+dados_clean |> 
+  summarytools::freq(escolaridade) |> 
+  as.data.frame() |>
+  rownames_to_column("escolaridade") |>
+  clean_names() |>
+  slice(1:8) |> 
+  ggplot() +
+  aes(
+    fct_reorder(escolaridade, percent_total, .desc = TRUE),
+    freq,
+    fill = escolaridade
+  ) +
+  geom_col() +
+  theme_economist() +
+  labs(title = "Escolaridade dos entrevistados", x = "Escolaridade", y = "Proporção (%)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        title = element_text(size = 12, face = "bold")) +
+  geom_label(
+    aes(label = scales::percent(percent_total/100)),
+    position = position_stack(vjust = 0.5),
+    size = 3
+  )
+```
+
+## Escolaridade (Gráfico de Waffle)
+
+```{r}
+#| fig.width: 12
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 0.5
+#| 
+dados_clean |> 
+  summarytools::freq(escolaridade) |> 
+  as.data.frame() |>
+  rownames_to_column("escolaridade") |>
+  clean_names() |>
+  slice(1:8) |> 
+  select(1:2) |>
+  waffle(rows = 12, size = 1.5, title = "Escolaridade dos entrevistados", xlab = "1 quadrado = 1%")
+```
+
+## Intenção de voto para prefeito (espontânea)
+
+<br> Estimamos a intenção de voto para prefeito de Humaitá (AM) em uma pesquisa espontânea. Neste tipo de pesquisa, o entrevistado responde sem ter acesso a uma lista de candidatos. <br> <br>
+
+```{r}
+#| fig.width: 12
+#| fig.height: 12
+#| fig-align: center
+#| fig.asp: 0.5
+
+ 
+dados_clean |> 
+  group_by(prefeito_espontanea) |>
+  summarise(n = n()) |>
+  ggplot() +
+  aes(
+    fct_infreq(prefeito_espontanea, n),
+    n,
+    fill = fct_infreq(prefeito_espontanea, n)
+  ) +
+  geom_col() +
+  theme_economist() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(title = "Intenção de voto para prefeito (espontânea)", x = "Candidato", y = "Número de votos") +
+  coord_flip() +
+  scale_fill_brewer(palette = "Accent") +
+  theme(legend.position = "none",
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        title = element_text(size = 12, face = "bold"),
+        plot.title = element_text(size = 14, face = "bold", hjust = 0.5)) +
+  geom_label(
+    aes(label = n),
+    position = position_stack(vjust = 1),
+    size = 5,
+    color = "black",
+    fill = "beige"
+  )
+
+```
+
+## Intenção de voto para prefeito (estimulada)
+
+<br> Estimamos a intenção de voto para prefeito de Humaitá (AM) em uma pesquisa estimulada. Neste tipo de pesquisa, o entrevistado responde tendo acesso a uma lista de candidatos. <br> <br>
+
+::: figura
+```{r}
+dados_clean |> 
+  group_by(prefeito_estimulada) |>
+  summarise(Total = n()) |>
+  arrange(desc(Total)) |> 
+  e_charts(prefeito_estimulada) |>
+  e_bar(serie = Total, itemStyle = list(color ="#31C2E2"))  |> 
+  #e_title("Intenção de voto para prefeito (estimulada)") |>
+  e_legend(show = FALSE) |>
+  e_tooltip(trigger = "item") |>
+  e_y_axis(name = "Número de votos") |>
+  e_x_axis(name = "Candidato") |> 
+  e_flip_coords()
+```
+:::

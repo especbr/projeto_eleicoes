@@ -1,0 +1,24 @@
+/*-- scss:rules --*/
+
+.reveal .slide-logo {
+  display: block;
+  position: relative;
+  bottom: unset !important;
+  right: unset !important;
+  top: 5px;
+  left: 1600px;
+  height: 60px !important;
+  width: 120px !important;
+  max-width: unset !important;
+  max-height: unset !important;
+}
+
+.figura {
+  align-self: center;
+  width: 80%;
+  margin: auto;
+  }
+
+h2 {
+  color: #33BADC;
+  }
