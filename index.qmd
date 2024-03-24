@@ -123,6 +123,33 @@ dados_clean |>
   )
 ```
 
+## Sexo
+
+De acordo com a pesquisa, a maioria dos entrevistados é do sexo feminino, com 52% dos entrevistados sendo mulheres e 48% homens.
+
+```{r}
+#| fig.width: 6
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 1
+
+dados_clean |> 
+  group_by(sexo) |>
+  summarise(total = n(),
+            percentual = round(n() / nrow(dados_clean) * 100, 1)) |>
+  e_charts(sexo) |>
+  e_pie(percentual) |>
+  e_title("Sexo dos entrevistados") |> 
+  e_tooltip()
+
+
+
+```
+
+
+
+```{r}
+
 ## Escolaridade (Gráfico de Waffle)
 
 ```{r}
