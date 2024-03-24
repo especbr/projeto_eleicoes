@@ -125,7 +125,6 @@ dados_clean |>
 ## Escolaridade (gráfico de waffle)
 
 
-
 ```{r}
 #| fig.width: 12
 #| fig.height: 6
