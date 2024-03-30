@@ -39,6 +39,7 @@ library(echarts4r)
 library(scales)
 library(summarytools)
 library(waffle)
+library(questionr)
 ```
 
 ```{r}
@@ -72,21 +73,90 @@ dados_clean <- dados |>
   select(-anexe_a_imagem_do_local_da_pesquisa, -pesquisador) |> 
   janitor::remove_empty(c("rows", "cols")) |> 
   janitor::remove_constant() |> 
-  mutate(across
-         (where(is.numeric),
-         ~ .x / sum(.x), .names = "prop_{.col}"))
+  mutate(
+    across(where(is.numeric),
+         ~ .x / sum(.x), .names = "prop_{.col}"),
+         across(where(is.POSIXct),
+         ~ as_date(.x), .names = "data_{.col}")) |> 
+  rename(dia = data_data_hora) |> 
+  mutate(mes = month(dia),
+         faixa_idade = factor(case_when(
+           idade < 18 ~ "Menor de 18 anos",
+           idade >= 18 & idade < 25 ~ "18 a 24 anos",
+           idade >= 25 & idade < 35 ~ "25 a 34 anos",
+           idade >= 35 & idade < 45 ~ "35 a 44 anos",
+           idade >= 45 & idade < 55 ~ "45 a 54 anos",
+           idade >= 55 & idade < 65 ~ "55 a 64 anos",
+           idade >= 65 ~ "65 anos ou mais"),
+         levels = c("Menor de 18 anos", "18 a 24 anos", "25 a 34 anos", 
+                    "35 a 44 anos", "45 a 54 anos", "55 a 64 anos", "65 anos ou mais")),
+         escolaridade = factor(escolaridade, levels = c(
+           "Analfabeto", 
+           "Fundamental Incompleto",
+           "Fundamental Completo",
+           "Médio Incompleto",
+           "Médio Completo",
+           "Superior Incompleto",
+           "Superior Completo",
+           "Pós-Graduado"
+  )))
 
 ```
 
 ## Apresentação {background-color="transparent" background-image="img/bg-Computador.png" background-opacity="0.5"}
 
-<br> Neste relatório, apresentamos os resultados de uma pesquisa de intenção de votos para prefeito e vereador de Humaitá (AM). A pesquisa foi realizada no dia 10 de outubro de 2024. <br> <br>
+<br> Neste relatório, apresentamos os resultados de uma pesquisa de intenção de votos para prefeito e vereador de Humaitá (AM). <br> <br>
 
 ## Metodologia
 
-<br> A pesquisa foi realizada por meio de entrevistas presenciais com 500 eleitores de Humaitá (AM). A margem de erro é de 5 pontos percentuais para mais ou para menos, com um nível de confiança de 95%. <br> <br>
+<br> 
+A pesquisa é do tipo quantitativa, com abordagem presencial em pontos da cidade proporcional ao número de eleitores da região. O método utilizado foi o de entrevistas pessoais com eleitores de Humaitá (AM). A pesquisa foi realizada nos dias 8 e 9 de outubro de 2020. <br> <br>
 
-## Perfil dos entrevistados
+A pesquisa foi realizada por meio de entrevistas presenciais com `r nrow(dados_clean)` eleitores de Humaitá (AM). A margem de erro é de 5 pontos percentuais para mais ou para menos, com um nível de confiança de 95%. <br>
+
+# Perfil dos entrevistados
+
+## Faixa Etária
+
+<br>
+A faixa etária dos entrevistados é apresentada no gráfico abaixo. Existe uma concentração nas faixas de idade entre 25 até 54 anos, que engloba mais de 60% da nossa amostra. <br> <br>
+
+
+```{r}
+#| fig.width: 12
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 0.5
+#| fig-caption: "Faixa etária dos entrevistados"
+
+dados_clean |> 
+  count(faixa_idade) |> 
+  as.data.frame() |>
+  drop_na() |> 
+  mutate(
+    percent_total = n / sum(n) * 100
+  ) |> 
+  ggplot() +
+  aes(
+    faixa_idade,
+    n,
+    fill = faixa_idade
+  ) +
+  geom_col() +
+  theme_economist() +
+  labs(x = "Faixa etária", y = "Proporção (%)") +
+  scale_fill_brewer(palette = "Set3") +
+  theme(legend.position = "none") +
+  geom_label(
+    aes(label = round(percent_total, 1)),
+    nudge_y = 2,
+    fill = "white",
+    size = 5,
+    font_face = "bold"
+    )
+
+
+```
 
 ## Escolaridade
 
@@ -97,15 +167,16 @@ dados_clean <- dados |>
 #| fig.asp: 0.5
 
 dados_clean |> 
-  summarytools::freq(escolaridade) |> 
+  count(escolaridade) |> 
   as.data.frame() |>
-  rownames_to_column("escolaridade") |>
-  clean_names() |>
   slice(1:8) |> 
+  mutate(
+    percent_total = n / sum(n) * 100
+  ) |> 
   ggplot() +
   aes(
-    fct_reorder(escolaridade, percent_total, .desc = TRUE),
-    freq,
+    fct_rev(escolaridade),
+    n,
     fill = escolaridade
   ) +
   geom_col() +
@@ -119,26 +190,29 @@ dados_clean |>
   geom_label(
     aes(label = scales::percent(percent_total/100)),
     position = position_stack(vjust = 0.5),
-    size = 3
-  )
+    size = 4,
+    fill = "white",
+    size = 5
+  ) +
+  coord_flip()
 ```
-## Escolaridade (gráfico de waffle)
 
+## Escolaridade (gráfico de waffle)
 
 ```{r}
 #| fig.width: 12
 #| fig.height: 6
 #| fig-align: center
 #| fig.asp: 0.5
-#| 
-dados_clean |> 
-  summarytools::freq(escolaridade) |> 
+ 
+dados_clean |>
+  count(escolaridade) |> 
   as.data.frame() |>
-  rownames_to_column("escolaridade") |>
-  clean_names() |>
-  slice(1:8) |> 
-  select(1:2) |>
-  waffle(rows = 12, size = 1.5, title = "Escolaridade dos entrevistados", xlab = "1 quadrado = 1%")
+  drop_na() |> 
+  mutate(
+    percent_total = n / sum(n) * 100
+  ) |> 
+  waffle(rows = 12, size = 1.5, xlab = "1 quadrado = 1%")
 ```
 
 ## Sexo
@@ -225,3 +299,84 @@ dados_clean |>
   e_flip_coords()
 ```
 :::
+
+## Heatmap de correlação entre faixa etária e intenção de voto para prefeito
+
+O gráfico abaixo mostra a correlação entre a faixa etária dos entrevistados e a intenção de voto para prefeito de Humaitá (AM). <br> 
+
+Podemos observar que a faixa etária dos entrevistados influencia a intenção de voto para prefeito. Por exemplo, a faixa etária de 25 a 34 anos tem uma maior intenção de voto para o candidato Chaves, enquanto a faixa etária de 55 a 64 anos a intenção de votos é mesma. <br> 
+
+O candidato Chapolin deveria focar seus esforços em recuperar votos da faixa etária de 45 a 54 anos, no qual tem uma intenção de voto menor em comparação com as outras faixas etárias. <br>
+  
+
+```{r}
+#| fig.width: 12
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 0.5
+
+dados_clean |> 
+  group_by(faixa_idade, prefeito_estimulada) |>
+  summarise(n = n()) |>
+  mutate(percent_total = n / sum(n) * 100) |>
+  ggplot() +
+  aes(
+    faixa_idade,
+    prefeito_estimulada,
+    fill = percent_total
+  ) +
+  geom_tile() +
+  theme_economist() +
+  labs(x = "Faixa etária", y = "Candidato") +
+  scale_fill_viridis_c() +
+  theme(legend.position = "right",
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        title = element_text(size = 12, face = "bold")) +
+  geom_label(
+    aes(label = round(percent_total, 0)),
+    size = 4,
+    fill = "white"
+  )
+
+```
+## Heatmap de correlação entre escolaridade e intenção de voto para prefeito
+
+<br>O gráfico abaixo mostra a correlação entre a escolaridade dos entrevistados e a intenção de voto para prefeito de Humaitá (AM). <br>
+
+Assim como a faixa etária, a escolaridade dos entrevistados influencia a intenção de voto para prefeito. Por exemplo, a escolaridade de ensino médio tem uma maior intenção de voto para o candidato Chapolin, enquanto a escolaridade de ensino superior a intenção de votos é mesma. <br>
+
+```{r}
+#| fig.width: 12
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 0.5
+
+dados_clean |> 
+  group_by(escolaridade, prefeito_estimulada) |>
+  summarise(n = n()) |>
+  mutate(percent_total = n / sum(n) * 100) |>
+  drop_na() |> 
+  ggplot() +
+  aes(
+    escolaridade,
+    prefeito_estimulada,
+    fill = percent_total
+  ) +
+  geom_tile() +
+  theme_economist() +
+  labs(x = "Escolaridade", y = "Candidato") +
+  scale_fill_continuous_tableau(palette = "Orange-Gold") +
+  theme(legend.position = "right",
+        axis.title.x = element_blank(),
+        axis.title.y = element_blank(),
+        axis.text.x = element_text(angle = 45, hjust = 0),
+        title = element_text(size = 12, face = "bold")) +
+  geom_label(
+    aes(label = round(percent_total, 0)),
+    size = 4,
+    fill = "white"
+  )
+
+
+```
