@@ -8,10 +8,9 @@ title-slide-attributes:
 author: "AG Consultoria"
 format: 
   revealjs:
-    width: 1920
-    height: 1080
-    slide-number: true
-    auto-stretch: true
+    autoScale: true
+    margin: 0.1
+    controls: true
     logo: "img/agenda-2.png"
     css: "custom.scss"
     theme: [simple, custom.scss]
@@ -300,7 +299,8 @@ dados_clean |>
 ```
 :::
 
-## Heatmap de correlação entre faixa etária e intenção de voto para prefeito
+## Heatmap de correlação entre faixa etária e intenção de voto para prefeito {.scrollable .smaller}
+
 
 O gráfico abaixo mostra a correlação entre a faixa etária dos entrevistados e a intenção de voto para prefeito de Humaitá (AM). <br> 
 

@@ -374,8 +374,8 @@ AG Consultoria
 <p>De acordo com a pesquisa, a maioria dos entrevistados é do sexo feminino, com 52% dos entrevistados sendo mulheres e 48% homens.</p>
 <div class="cell" data-layout-align="center" data-fig.asp="1">
 <div class="cell-output-display">
-<div class="echarts4r html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-baf465966058d82a3339" style="width:100%;height:500px;"></div>
-<script type="application/json" data-for="htmlwidget-baf465966058d82a3339">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Feminino","Masculino"]},"series":[{"name":"percentual","type":"pie","data":[{"value":52.3,"name":"Feminino"},{"value":47.7,"name":"Masculino"}]}],"title":[{"text":"Sexo dos entrevistados"}],"tooltip":{"trigger":"item"}},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<div class="echarts4r html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-5fe01b79e539cc2a8f05" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-5fe01b79e539cc2a8f05">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"legend":{"data":["Feminino","Masculino"]},"series":[{"name":"percentual","type":"pie","data":[{"value":52.3,"name":"Feminino"},{"value":47.7,"name":"Masculino"}]}],"title":[{"text":"Sexo dos entrevistados"}],"tooltip":{"trigger":"item"}},"dispose":true},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </section>
@@ -390,13 +390,13 @@ AG Consultoria
 <div class="figura">
 <div class="cell">
 <div class="cell-output-display">
-<div class="echarts4r html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-dc2be3a53a66dfb6137b" style="width:100%;height:500px;"></div>
-<script type="application/json" data-for="htmlwidget-dc2be3a53a66dfb6137b">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"xAxis":[{"show":true,"name":"Número de votos"}],"yAxis":[{"data":["Chaves","Chapolin","Não decidiu","Seu Barriga","Godines","Branco","Nhonho","Nulo","Seu Madruga"],"type":"category","boundaryGap":true,"name":"Candidato"}],"legend":{"data":["Total"],"show":false,"type":"plain"},"series":[{"data":[{"value":["109","Chaves"]},{"value":[" 70","Chapolin"]},{"value":[" 52","Não decidiu"]},{"value":[" 43","Seu Barriga"]},{"value":[" 11","Godines"]},{"value":[" 10","Branco"]},{"value":["  7","Nhonho"]},{"value":["  7","Nulo"]},{"value":["  1","Seu Madruga"]}],"name":"Total","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","itemStyle":{"color":"#31C2E2"}}],"tooltip":{"trigger":"item"}},"dispose":true},"evals":[],"jsHooks":[]}</script>
+<div class="echarts4r html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a4763ab2a685b02fd49a" style="width:100%;height:500px;"></div>
+<script type="application/json" data-for="htmlwidget-a4763ab2a685b02fd49a">{"x":{"theme":"","tl":false,"draw":true,"renderer":"canvas","events":[],"buttons":[],"opts":{"xAxis":[{"show":true,"name":"Número de votos"}],"yAxis":[{"data":["Chaves","Chapolin","Não decidiu","Seu Barriga","Godines","Branco","Nhonho","Nulo","Seu Madruga"],"type":"category","boundaryGap":true,"name":"Candidato"}],"legend":{"data":["Total"],"show":false,"type":"plain"},"series":[{"data":[{"value":["109","Chaves"]},{"value":[" 70","Chapolin"]},{"value":[" 52","Não decidiu"]},{"value":[" 43","Seu Barriga"]},{"value":[" 11","Godines"]},{"value":[" 10","Branco"]},{"value":["  7","Nhonho"]},{"value":["  7","Nulo"]},{"value":["  1","Seu Madruga"]}],"name":"Total","type":"bar","yAxisIndex":0,"xAxisIndex":0,"coordinateSystem":"cartesian2d","itemStyle":{"color":"#31C2E2"}}],"tooltip":{"trigger":"item"}},"dispose":true},"evals":[],"jsHooks":[]}</script>
 </div>
 </div>
 </div>
 </section>
-<section id="heatmap-de-correlação-entre-faixa-etária-e-intenção-de-voto-para-prefeito" class="slide level2">
+<section id="heatmap-de-correlação-entre-faixa-etária-e-intenção-de-voto-para-prefeito" class="slide level2 scrollable smaller">
 <h2>Heatmap de correlação entre faixa etária e intenção de voto para prefeito</h2>
 <p>O gráfico abaixo mostra a correlação entre a faixa etária dos entrevistados e a intenção de voto para prefeito de Humaitá (AM). <br></p>
 <p>Podemos observar que a faixa etária dos entrevistados influencia a intenção de voto para prefeito. Por exemplo, a faixa etária de 25 a 34 anos tem uma maior intenção de voto para o candidato Chaves, enquanto a faixa etária de 55 a 64 anos a intenção de votos é mesma. <br></p>
@@ -445,7 +445,7 @@ AG Consultoria
       // Full list of configuration options available at:
       // https://revealjs.com/config/
       Reveal.initialize({
-'controlsAuto': true,
+'controlsAuto': false,
 'previewLinksAuto': false,
 'smaller': false,
 'pdfSeparateFragments': false,
@@ -456,7 +456,7 @@ AG Consultoria
 'smaller': false,
  
         // Display controls in the bottom right corner
-        controls: false,
+        controls: true,
 
         // Help the user learn the controls by providing hints, for example by
         // bouncing the down arrow when they first encounter a vertical slide
@@ -473,7 +473,7 @@ AG Consultoria
         progress: true,
 
         // Display the page number of the current slide
-        slideNumber: 'c/t',
+        slideNumber: false,
 
         // 'all', 'print', or 'speaker'
         showSlideNumber: 'all',
@@ -598,9 +598,9 @@ AG Consultoria
         // The "normal" size of the presentation, aspect ratio will be preserved
         // when the presentation is scaled to fit different resolutions. Can be
         // specified using percentage units.
-        width: 1920,
+        width: 1050,
 
-        height: 1080,
+        height: 700,
 
         // Factor of the display size that should remain empty around the content
         margin: 0.1,
