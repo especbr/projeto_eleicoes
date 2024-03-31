@@ -39,6 +39,7 @@ library(scales)
 library(summarytools)
 library(waffle)
 library(questionr)
+library(wordcloud)
 ```
 
 ```{r}
@@ -381,5 +382,23 @@ dados_clean |>
     fill = "white"
   )
 
+
+```
+
+
+## Wordcloud de vereadores mais citados
+
+<br> O gráfico abaixo mostra os vereadores mais citados pelos entrevistados. <br>
+
+```{r}
+#| fig.width: 12
+#| fig.height: 6
+#| fig-align: center
+#| fig.asp: 0.5
+
+dados_clean |> 
+  filter(vereador_espontanea != "Não tenho candidato") |>
+  count(vereador_espontanea) |> 
+  with(wordcloud(words = vereador_espontanea, freq = n, min.freq = 1, max.words = 100, random.order = FALSE, rot.per = 0.35, colors = brewer.pal(8, "Dark2")))
 
 ```

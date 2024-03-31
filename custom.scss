@@ -41,13 +41,14 @@ $presentation-heading-color: lighten($theme-pink, 15%);
   font-size: 8px;
   align-self: center;
   width: 80%;
-  height: 80%;
+  height: 60%;
   margin: auto;
+  scroll-behavior: smooth;
   }
 
 .echarts2 {
   align-self: center;
   width: 80%;
-  height: 60%;
+  height: 40%;
   margin: auto;
   }
