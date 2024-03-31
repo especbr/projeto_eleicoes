@@ -9,7 +9,20 @@ $presentation-heading-color: lighten($theme-pink, 15%);
 
 /*-- scss:rules --*/
 
-.reveal .slide-logo {
+.reveal {
+  font-size: 24px;
+
+  h1 {
+    font-size: 2.5em;
+    color: $heading-color;
+  }
+
+  h2 {
+    font-size: 2em;
+    color: $heading-color;
+  }
+
+  .slide-logo {
   display: block;
   position: relative;
   bottom: unset !important;
@@ -22,10 +35,19 @@ $presentation-heading-color: lighten($theme-pink, 15%);
   max-height: unset !important;
 }
 
-.figura {
+}
+
+.echarts {
+  font-size: 8px;
   align-self: center;
-  width: 100%;
+  width: 80%;
+  height: 80%;
   margin: auto;
   }
 
-
+.echarts2 {
+  align-self: center;
+  width: 80%;
+  height: 60%;
+  margin: auto;
+  }

@@ -115,7 +115,7 @@ A pesquisa foi realizada por meio de entrevistas presenciais com `r nrow(dados_c
 
 # Perfil dos entrevistados
 
-## Faixa Etária
+## Faixa Etária 
 
 <br>
 A faixa etária dos entrevistados é apresentada no gráfico abaixo. Existe uma concentração nas faixas de idade entre 25 até 54 anos, que engloba mais de 60% da nossa amostra. <br> <br>
@@ -157,7 +157,7 @@ dados_clean |>
 
 ```
 
-## Escolaridade
+## Escolaridade 
 
 ```{r}
 #| fig.width: 12
@@ -214,9 +214,11 @@ dados_clean |>
   waffle(rows = 12, size = 1.5, xlab = "1 quadrado = 1%")
 ```
 
-## Sexo
+## Sexo 
 
 De acordo com a pesquisa, a maioria dos entrevistados é do sexo feminino, com 52% dos entrevistados sendo mulheres e 48% homens.
+
+::: {.echarts}
 
 ```{r}
 #| fig.width: 6
@@ -236,6 +238,7 @@ dados_clean |>
 
 
 ```
+:::
 
 ## Intenção de voto para prefeito (espontânea)
 
@@ -278,11 +281,11 @@ dados_clean |>
 
 ```
 
-## Intenção de voto para prefeito (estimulada)
+## Intenção de voto para prefeito (estimulada) 
 
 <br> Estimamos a intenção de voto para prefeito de Humaitá (AM) em uma pesquisa estimulada. Neste tipo de pesquisa, o entrevistado responde tendo acesso a uma lista de candidatos. <br> <br>
 
-::: figura
+::: .echarts2
 ```{r}
 dados_clean |> 
   group_by(prefeito_estimulada) |>
@@ -340,7 +343,7 @@ dados_clean |>
   )
 
 ```
-## Heatmap de correlação entre escolaridade e intenção de voto para prefeito
+## Heatmap de correlação entre escolaridade e intenção de voto para prefeito 
 
 <br>O gráfico abaixo mostra a correlação entre a escolaridade dos entrevistados e a intenção de voto para prefeito de Humaitá (AM). <br>
 
